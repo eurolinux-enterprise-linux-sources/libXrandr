@@ -1,7 +1,7 @@
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
-Version: 1.3.0
-Release: 4%{?dist}
+Version: 1.4.0
+Release: 1%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -21,10 +21,6 @@ X.Org X11 libXrandr runtime library
 Summary: X.Org X11 libXrandr development package
 Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
-
-Requires: pkgconfig
-Requires: pkgconfig(randrproto) >= 1.2.1
-Requires: libXext-devel
 
 %description devel
 X.Org X11 libXrandr development package
@@ -64,8 +60,23 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
-* Wed Nov 4 2009 Soren Sandmann <ssp@redhat.com> 1.3.0-4
-- Add requirement on libXext-devel
+* Thu Jul 26 2012 Dave Airlie <airlied@redhat.com> 1.4.0-1
+- libXrandr 1.4.0 upstream release.
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Mon Nov 08 2010 Adam Jackson <ajax@redhat.com> 1.3.1-1
+- libXrandr 1.3.1
+
+* Tue Nov 10 2009 Adam Jackson <ajax@redhat.com> 1.3.0-5
+- randr-git.patch: Update to git
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.3.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
