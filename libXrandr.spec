@@ -4,7 +4,7 @@
 
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
-Version: 1.4.2
+Version: 1.5.1
 Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
@@ -19,15 +19,15 @@ Source2:    commitid
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
 %endif
 
-Requires: libX11 >= 1.5.99.902
+Requires: libX11 >= 1.6.0
 
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool
 BuildRequires: xorg-x11-proto-devel
-BuildRequires: pkgconfig(randrproto) >= 1.3.0
+BuildRequires: pkgconfig(randrproto) >= 1.5.0
 BuildRequires: pkgconfig(xrender)
 BuildRequires: pkgconfig(xext)
-BuildRequires: pkgconfig(x11) >= 1.5.99.902
+BuildRequires: pkgconfig(x11) >= 1.6.0
 
 %description
 X.Org X11 libXrandr runtime library
@@ -76,6 +76,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
+* Thu Jan 19 2017 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.5.1-1
+- libXrandr 1.5.1
+- fixes CVE-2016-7947, CVE-2016-7948 (#1406222)
+
 * Fri Nov 13 2015 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.4.2-1
 - libXrandr 1.4.2
 
