@@ -4,8 +4,8 @@
 
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
-Version: 1.4.1
-Release: 2.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.4.2
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -76,6 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
+* Fri Nov 13 2015 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.4.2-1
+- libXrandr 1.4.2
+
 * Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.4.1-2.1
 - Mass rebuild
 
