@@ -1,18 +1,33 @@
+%global tarball libXrandr
+#global gitdate 20130524
+%global gitversion c90f74497
+
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
-Version: 1.4.0
-Release: 1%{?dist}
+Version: 1.4.1
+Release: 2.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Source0: http://www.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
+%if 0%{?gitdate}
+Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source1:    make-git-snapshot.sh
+Source2:    commitid
+%else
+Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
+%endif
 
+Requires: libX11 >= 1.5.99.902
+
+BuildRequires: xorg-x11-util-macros
+BuildRequires: autoconf automake libtool
 BuildRequires: xorg-x11-proto-devel
 BuildRequires: pkgconfig(randrproto) >= 1.3.0
 BuildRequires: pkgconfig(xrender)
 BuildRequires: pkgconfig(xext)
+BuildRequires: pkgconfig(x11) >= 1.5.99.902
 
 %description
 X.Org X11 libXrandr runtime library
@@ -26,9 +41,10 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXrandr development package
 
 %prep
-%setup -q
+%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build
+autoreconf -v --install --force
 %configure  --disable-static
 make %{?_smp_mflags}
 
@@ -47,7 +63,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING ChangeLog
+%doc AUTHORS COPYING
 %{_libdir}/libXrandr.so.2
 %{_libdir}/libXrandr.so.2.2.0
 
@@ -60,6 +76,28 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
+* Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.4.1-2.1
+- Mass rebuild
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.4.1-2
+- Mass rebuild 2013-12-27
+
+* Mon Jun 03 2013 Peter Hutterer <peter.hutterer@redhat.com> 1.4.1-1
+- libXrandr 1.4.1
+
+* Mon May 27 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.4.0-5.20130524gitc90f74497
+- Require libX11 1.6RC2 for _XEatDataWords
+
+* Fri May 24 2013 Peter Hutterer <peter.hutterer@redhat.com> 1.4.0-4.20130524gitc90f74497
+- Update to git snapshot to fix CVEs listed below:
+- CVE-2013-1986
+
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.4.0-3
+- autoreconf for aarch64
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Thu Jul 26 2012 Dave Airlie <airlied@redhat.com> 1.4.0-1
 - libXrandr 1.4.0 upstream release.
 
