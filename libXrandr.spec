@@ -4,7 +4,7 @@
 
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
-Version: 1.4.2
+Version: 1.5.1
 Release: 2%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
@@ -19,15 +19,15 @@ Source2:    commitid
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
 %endif
 
-Requires: libX11 >= 1.5.99.902
+Requires: libX11 >= 1.6.0
 
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool
 BuildRequires: xorg-x11-proto-devel
-BuildRequires: pkgconfig(randrproto) >= 1.3.0
+BuildRequires: pkgconfig(randrproto) >= 1.5.0
 BuildRequires: pkgconfig(xrender)
 BuildRequires: pkgconfig(xext)
-BuildRequires: pkgconfig(x11) >= 1.5.99.902
+BuildRequires: pkgconfig(x11) >= 1.6.0
 
 %description
 X.Org X11 libXrandr runtime library
@@ -76,6 +76,21 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*.3*
 
 %changelog
+* Tue Feb 07 2017 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.5.1-2
+- rebuild for new build of libXrender
+
+* Mon Jan 23 2017 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.5.1-1
+- libXrandr 1.5.1
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.5.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
+* Sun May 17 2015 Dave Airlie <airlied@redhat.com> 1.5.0-1
+- libXrandr 1.5.0 - fixup requires/br
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.4.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 

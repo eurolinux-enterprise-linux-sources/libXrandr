@@ -25,6 +25,7 @@
 #include <config.h>
 #endif
 
+#include <limits.h>
 #include <stdio.h>
 #include <X11/Xlib.h>
 /* we need to be able to manipulate the Display structure on events */
@@ -59,12 +60,20 @@ XRRGetProviderResources(Display *dpy, Window window)
       return NULL;
     }
 
-    nbytes = (long) rep.length << 2;
+    if (rep.length < INT_MAX >> 2) {
+	nbytes = (long) rep.length << 2;
 
-    nbytesRead = (long) (rep.nProviders * 4);
+	nbytesRead = (long) (rep.nProviders * 4);
 
-    rbytes = (sizeof(XRRProviderResources) + rep.nProviders * sizeof(RRProvider));
-    xrpr = (XRRProviderResources *) Xmalloc(rbytes);
+	rbytes = (sizeof(XRRProviderResources) + rep.nProviders *
+		  sizeof(RRProvider));
+	xrpr = (XRRProviderResources *) Xmalloc(rbytes);
+    } else {
+	nbytes = 0;
+	nbytesRead = 0;
+	rbytes = 0;
+	xrpr = NULL;
+    }
 
     if (xrpr == NULL) {
        _XEatDataWords (dpy, rep.length);
@@ -77,7 +86,7 @@ XRRGetProviderResources(Display *dpy, Window window)
     xrpr->nproviders = rep.nProviders;
     xrpr->providers = (RRProvider *)(xrpr + 1);
 
-    _XRead32(dpy, xrpr->providers, rep.nProviders << 2);
+    _XRead32(dpy, (long *) xrpr->providers, rep.nProviders << 2);
 
     if (nbytes > nbytesRead)
       _XEatData (dpy, (unsigned long) (nbytes - nbytesRead));
@@ -121,6 +130,17 @@ XRRGetProviderInfo(Display *dpy, XRRScreenResources *resources, RRProvider provi
 	return NULL;
     }
 
+    if (rep.length > INT_MAX >> 2 || rep.length < ProviderInfoExtra >> 2)
+    {
+	if (rep.length < ProviderInfoExtra >> 2)
+	    _XEatDataWords (dpy, rep.length);
+	else
+	    _XEatDataWords (dpy, rep.length - (ProviderInfoExtra >> 2));
+	UnlockDisplay (dpy);
+	SyncHandle ();
+	return NULL;
+    }
+
     nbytes = ((long) rep.length << 2) - ProviderInfoExtra;
 
     nbytesRead = (long)(rep.nCrtcs * 4 +
@@ -152,10 +172,10 @@ XRRGetProviderInfo(Display *dpy, XRRScreenResources *resources, RRProvider provi
     xpi->associated_capability = (unsigned int *)(xpi->associated_providers + rep.nAssociatedProviders);
     xpi->name = (char *)(xpi->associated_capability + rep.nAssociatedProviders);
 
-    _XRead32(dpy, xpi->crtcs, rep.nCrtcs << 2);
-    _XRead32(dpy, xpi->outputs, rep.nOutputs << 2);
+    _XRead32(dpy, (long *) xpi->crtcs, rep.nCrtcs << 2);
+    _XRead32(dpy, (long *) xpi->outputs, rep.nOutputs << 2);
 
-    _XRead32(dpy, xpi->associated_providers, rep.nAssociatedProviders << 2);
+    _XRead32(dpy, (long *) xpi->associated_providers, rep.nAssociatedProviders << 2);
 
     /*
      * _XRead32 reads a series of 32-bit values from the protocol and writes
